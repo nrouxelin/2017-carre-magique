@@ -49,22 +49,17 @@ test_colonne(L,N,N,V) :- somme_colonne(L,N,N,R), R==V.
 test_colonne(L,N,I,V) :- somme_colonne(L,N,I,R), R==V, M is I+1, test_colonne(L,N,M,V).
 test_colonnes(L,N,V) :- test_colonne(L,N,1,V).
 
-
 /* test diagonale(L,N,V) := réussit si la somme des éléments de la diagonale principale est égale à V */
 
 test_diagonale(L,0,0).
 test_diagonale(L,N,V) :- M is N+1, accumuler(L,1,M,N,R), R==V.
 
-
 /* test antidiagonale(L,N,V) := réussit si la somme des éléments de l'anti diagonale principale est égale à V */
-
 
 test_antidiagonale(L,0,0).
 test_antidiagonale(L,N,V) :- M is N-1, accumuler(L,N,M,N,R), R==V.
 
-
 /* carre magique(N,L) := L est un carré magique de taille NxN */
 
-carre_magiq(N,L2) :- M is N*N, genere(M,L1), perm(L1,L2), nombre_magique(N,K), test_lignes(L2,N,K), test_colonnes(L2,N,K), test_diagonale(L2,N,K), test_antidiagonale(L2,N,K).
-
+carre_magique(N,L) :- M is N*N, genere(M,L1), perm(L1,L), nombre_magique(N,K), test_lignes(L,N,K), test_colonnes(L,N,K), test_diagonale(L,N,K), test_antidiagonale(L,N,K).
 
