@@ -1,0 +1,96 @@
+/* genere(N,L) := L une liste qui contient les entier de N à 1 */
+
+genere(0,[]) :- !.
+genere(N,[N|L]) :- M is N-1 , genere(M,L).
+
+/* delete(X,L,R) */
+
+delete(X,[X|L1],L1).
+delete(Y,[X|L1],[X|L2]) :- delete(Y,L1,L2).
+
+/* perm(L,P) := sort toute les permutations d'une liste L */
+
+perm([],[]).
+perm(L,[X|P]) :- delete(X,L,L1) , perm(L1,P).
+
+/* nombre-magique(N,M) := le nombre magique du carré de tailmle N */
+
+nombre_magique(N,M) :- M is N*(N*N+1)/2.
+
+/* nth(L,N,R) := renvoi le Nième element de la liste L */
+
+nth(L,N,R) :- N=<0, fail.
+nth(L,N,R) :-  length(L,P), N>P, fail.
+nth([R|L],1,R).
+nth([X|L],N,R) :- M is N-1, nth(L,M,R).
+
+/* accumuler(+L,+Init,+Step,+N,-R) := somme des N elts de L à partir du rang Init separes par un pas Step */
+
+accumuler(L,I,S,0,0).
+accumuler(L,I,S,N,R) :- nth(L,I,X), J is I+S, M is N-1, accumuler(L,J,S,M,Z), R is Z+X.
+
+/* somme_Ligne(L,N,I,R) */
+
+somme_ligne(L,N,I,R) :- J is (I-1)*N+1, accumuler(L,J,1,N,R).
+
+/* somme_colonne(L,N,J,R) */
+
+somme_colonne(L,N,J,R) :- accumuler(L,J,N,N,R).
+
+/* test lignes(L,N,V) := réussit si la somme sur chaque ligne est égale à V*/
+
+test_ligne(L,N,N,V) :- somme_ligne(L,N,N,R), R==V.
+test_ligne(L,N,I,V) :- somme_ligne(L,N,I,R), R==V, M is I+1, test_ligne(L,N,M,V).
+test_lignes(L,N,V) :- test_ligne(L,N,1,V).
+
+/* test colonnes(L,N,V) := réussit si la somme sur chaque colonne est égale à V*/
+
+test_colonne(L,N,N,V) :- somme_colonne(L,N,N,R), R==V.
+test_colonne(L,N,I,V) :- somme_colonne(L,N,I,R), R==V, M is I+1, test_colonne(L,N,M,V).
+test_colonnes(L,N,V) :- test_colonne(L,N,1,V).
+
+
+/* test diagonale(L,N,V) := réussit si la somme des éléments d ela diagonale principale est égale à V */
+
+test_diagonale(L,0,0).
+test_diagonale(L,N,V) :- M is N+1, accumuler(L,1,M,N,R), R==V.
+
+
+/* test antidiagonale(L,N,V) := réussit si la somme des éléments d ela anti diagonale principale est égale à V */
+
+
+test_antidiagonale(L,0,0).
+test_antidiagonale(L,N,V) :- M is N-1, accumuler(L,N,M,N,R), R==V.
+
+
+/* carre magique(N,L) := L est un carré magique de taille NxN*/
+
+carre_magiq(N,L2) :- M is N*N, genere(M,L1), perm(L1,L2), nombre_magique(N,K), test_lignes(L2,N,K), test_colonnes(L2,N,K), test_diagonale(L2,N,K), test_antidiagonale(L2,N,K).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
